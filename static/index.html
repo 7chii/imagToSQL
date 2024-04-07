@@ -1,0 +1,80 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>teste SQL 4 learning</h1>
+    <img src="" alt="" id="imag">
+    <form>
+        <label for="nome">nome</label>
+        <input type="text" id="nome">
+        <label for="custo">custo</label>
+        <input type="text" id="custo">
+        <label for="valor">valor</label>
+        <input type="text" id="valor">
+
+        <label for="splash">splash</label>
+        <input type="file" accept=".jpg" id="splash">
+
+        <label for="id">id</label>
+        <input type="text" id="id">
+        <button type="submit">Mandar</button>
+    </form>
+    <iframe src="/imag" width="600" height="400"></iframe>
+<script>
+    const fileinput = document.getElementById("splash");
+                fileinput.addEventListener("change", e =>{
+                    const file = fileinput.files[0];
+                    const reader = new FileReader();
+
+                    reader.addEventListener("load", ()=>{
+                        console.log(reader.result);
+                        let str = reader.result;
+                        document.getElementById("imag").src = str;
+                    });
+                    reader.readAsDataURL(file);
+                });
+    document.querySelector('button')
+            .addEventListener('click', (e) => {
+                e.preventDefault();
+                const str = document.getElementById("imag").src;
+                const nome = document
+                    .querySelector('#nome').value;
+ 
+                const valor = document
+                    .querySelector('#valor').value;
+
+                const custo = document.querySelector('#custo').value;
+
+                const id = document.querySelector('#id').value;
+
+                //const img = document.querySelector('#splash').value;
+                fetch('/fpost', {
+                    method: 'POST',
+                    headers: {
+                        Authorization: 'Bearer abcdxyz',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        nome,
+                        custo,
+                        valor,
+                        id,
+                        str
+                    }),
+                })
+                    .then((res) => {
+                        return res.json();
+                    })
+                    .then((data) => console.log(data));
+            });
+                
+            
+                    
+                     
+                
+</script>
+</body>
+</html>
