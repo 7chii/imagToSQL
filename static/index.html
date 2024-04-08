@@ -25,9 +25,6 @@
         <button type="submit" id="butnome">Pesquisar img</button>
         
     </form>
-    <iframe src="#" width="600" height="600" id="iframe">
-        
-    </iframe>
 <script>
     const fileinput = document.getElementById("splash");
                 fileinput.addEventListener("change", e =>{
@@ -41,6 +38,10 @@
                     });
                     reader.readAsDataURL(file);
                 });
+                function crimg(data){
+            var img = document.getElementById("imag");
+            img.src = "data:image/jpg;base64, "+data;
+                };
     document.querySelector('#butnome').addEventListener('click', (e)=>{
         e.preventDefault();
         const str = document.getElementById("imag").src;
@@ -72,8 +73,10 @@
                     .then((res) => {
                         return res.json();
                     })
-                    .then((data) => console.log(data));
+                    .then((data) => console.log(crimg(data)));
             });
+            
+        
     document.querySelector('button')
             .addEventListener('click', (e) => {
                 e.preventDefault();
@@ -104,15 +107,11 @@
                     }),
                 })
                     .then((res) => {
-                        return JSON.stringify(res.json());
+                        return res.json();
                     })
-                    .then((data) => crimg(data));
+                    .then((data) => console.log(data));
             });
-        function crimg(data){
-            var img = document.createElement("img");
-            img.src = data;
-            document.appendChild(img);
-        }
+       
             
                     
                      
