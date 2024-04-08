@@ -56,15 +56,40 @@ app.get('/query', (req,res)=>{
         return res.json(data);
     })
 })
-app.get('/imag', async(req, res)=>{
-    /*const { nomer } = req.body;
-        res.send(
+app.post('/img', (req, res)=>{
+    const { nome, custo, valor, id, str} = req.body;
+    const { authorization } = req.headers;
+        /*res.setHeader(
+
             {
-                nomer
-            });
-            */
+                nome,
+                custo,
+                valor,
+                id,
+                str,
+                authorization
+            });*/
+            console.log(nome);
+            console.log(custo);
+            console.log(valor);
+            console.log(id);
+       const blob = Buffer.from(str, 'base64');
+       console.log(blob);
+       const sqls = `SELECT splash FROM champ WHERE nome='${nome}';`;
+       
+    db.query(sqls, (err, result)=>{
+        if (err) throw err;
+        const dat = Buffer.from(result[0].splash);
+        var string = dat.toString('base64');
+        var partS = string.split('jpegbase64');
+        //console.log(partS[1]);
+        res.send(`"${partS[1]}"`);
+        //<img src="data:image/jpg;base64, " alt="" height="900">
+});
+});
+app.get('/imag', async(req, res)=>{
     //const dataImagePrefix = `data:image/png;base64,`
-    const str = `SELECT splash FROM champ WHERE nome='Aatrox';`;
+    const str = `SELECT splash FROM champ WHERE nome='${nomer}';`;
     db.query(str, (err, result)=>{
         if (err) throw err;
         const dat = Buffer.from(result[0].splash);
@@ -76,4 +101,4 @@ app.get('/imag', async(req, res)=>{
 })
 app.listen(port, ()=>{
     console.log(`api listening on port ${port}`);
-})
+});

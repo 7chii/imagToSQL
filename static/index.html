@@ -21,10 +21,12 @@
         <label for="id">id</label>
         <input type="text" id="id">
         <button type="submit" id="butsub">Mandar</button>
+
+        <button type="submit" id="butnome">Pesquisar img</button>
         
     </form>
-    <iframe src="/imag" width="600" height="600" id="iframe">
-        <button type="submit" id="butnome">Pesquisar img</button>
+    <iframe src="#" width="600" height="600" id="iframe">
+        
     </iframe>
 <script>
     const fileinput = document.getElementById("splash");
@@ -39,21 +41,39 @@
                     });
                     reader.readAsDataURL(file);
                 });
-    /*document.querySelector('#butnome').addEventListener('input', (e)=>{
+    document.querySelector('#butnome').addEventListener('click', (e)=>{
         e.preventDefault();
-        const nomer = document
+        const str = document.getElementById("imag").src;
+                const nome = document
                     .querySelector('#nome').value;
+ 
+                const valor = document
+                    .querySelector('#valor').value;
 
-        fetch('/imag',{
-            method:'GET',
-            body: JSON.stringify({
-                nomer
-            })
-        }).then((res) => {
+                const custo = document.querySelector('#custo').value;
+
+                const id = document.querySelector('#id').value;
+
+                //const img = document.querySelector('#splash').value;
+                fetch('/img', {
+                    method: 'POST',
+                    headers: {
+                        Authorization: 'Bearer abcdxyz',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        nome,
+                        custo,
+                        valor,
+                        id,
+                        str
+                    }),
+                })
+                    .then((res) => {
                         return res.json();
                     })
-                    .then((data) => document.getElementById("iframe").src = "/imag");
-    });*/
+                    .then((data) => console.log(data));
+            });
     document.querySelector('button')
             .addEventListener('click', (e) => {
                 e.preventDefault();
@@ -84,11 +104,15 @@
                     }),
                 })
                     .then((res) => {
-                        return res.json();
+                        return JSON.stringify(res.json());
                     })
-                    .then((data) => console.log(data));
+                    .then((data) => crimg(data));
             });
-                
+        function crimg(data){
+            var img = document.createElement("img");
+            img.src = data;
+            document.appendChild(img);
+        }
             
                     
                      
