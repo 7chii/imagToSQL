@@ -1,7 +1,7 @@
 let express = require('express');
 let app = express();
 let path = require('path');
-const port = 3360;
+const port = 8080;
 var sql = require('mysql');
 //const { promise } = require('bcrypt/promises');
 
