@@ -20,9 +20,12 @@
 
         <label for="id">id</label>
         <input type="text" id="id">
-        <button type="submit">Mandar</button>
+        <button type="submit" id="butsub">Mandar</button>
+        
     </form>
-    <iframe src="/imag" width="600" height="400"></iframe>
+    <iframe src="/imag" width="600" height="600" id="iframe">
+        <button type="submit" id="butnome">Pesquisar img</button>
+    </iframe>
 <script>
     const fileinput = document.getElementById("splash");
                 fileinput.addEventListener("change", e =>{
@@ -36,6 +39,21 @@
                     });
                     reader.readAsDataURL(file);
                 });
+    /*document.querySelector('#butnome').addEventListener('input', (e)=>{
+        e.preventDefault();
+        const nomer = document
+                    .querySelector('#nome').value;
+
+        fetch('/imag',{
+            method:'GET',
+            body: JSON.stringify({
+                nomer
+            })
+        }).then((res) => {
+                        return res.json();
+                    })
+                    .then((data) => document.getElementById("iframe").src = "/imag");
+    });*/
     document.querySelector('button')
             .addEventListener('click', (e) => {
                 e.preventDefault();

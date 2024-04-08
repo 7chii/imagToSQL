@@ -3,7 +3,8 @@ let app = express();
 let path = require('path');
 const port = 8080;
 var sql = require('mysql');
-let bodyParser = require('body-parser');
+//const { promise } = require('bcrypt/promises');
+
 const db = sql.createConnection({
     host: "localhost",
     user: "root",
@@ -28,12 +29,10 @@ app.post('/fpost',(req, res)=>{
                 str,
                 authorization
             });
-        /*console.log(nome);
-        console.log(custo);
-        console.log(valor);
-        console.log(id);
-        console.log(str);
-        */
+            console.log(nome);
+            console.log(custo);
+            console.log(valor);
+            console.log(id);
        const blob = Buffer.from(str, 'base64');
        console.log(blob);
        //nome=nidalee, custo=640, valor=320, ?, id=5
@@ -57,16 +56,22 @@ app.get('/query', (req,res)=>{
         return res.json(data);
     })
 })
-app.get('/imag', (req, res)=>{
+app.get('/imag', async(req, res)=>{
+    /*const { nomer } = req.body;
+        res.send(
+            {
+                nomer
+            });
+            */
     //const dataImagePrefix = `data:image/png;base64,`
-    const str = "SELECT splash FROM champ WHERE nome='Nidalee';";
-    db.query(str, (err, result, fields)=>{
-        console.log(result[0]);
-        const valor = Buffer.from(result, 'utf-8');
-        console.log(valor);
-       // console.log(buffer);
-        if(err) return res.json("Error");
-        return res.json(result);
+    const str = `SELECT splash FROM champ WHERE nome='Aatrox';`;
+    db.query(str, (err, result)=>{
+        if (err) throw err;
+        const dat = Buffer.from(result[0].splash);
+        var string = dat.toString('base64');
+        var partS = string.split('jpegbase64');
+        res.send(`<img src="data:image/jpg;base64, ${partS[1]}" alt="" height="900">`);
+        //console.log(partS[1]);
     })
 })
 app.listen(port, ()=>{
