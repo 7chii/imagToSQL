@@ -6,6 +6,7 @@
 </head>
 <body>
     <h1>teste SQL 4 learning</h1>
+    <h3 id="val"></h3>
     <img src="" alt="" id="imag">
     <form>
         <label for="nome">nome</label>
@@ -20,10 +21,12 @@
 
         <label for="id">id</label>
         <input type="text" id="id">
-        <button type="submit" id="butsub">Mandar</button>
-
-        <button type="submit" id="butnome">Pesquisar img</button>
-        
+        <button type="submit" id="butsub">Mandar champ</button>
+        <button type="submit" id="butup">Mandar skin</button>
+        <hr>
+        <button type="submit" id="butnome">Pesquisar img em champ</button>
+        <button type="submit" id="butnomes">Pesquisar img em skins</button>
+        <hr>
     </form>
 <script>
     const fileinput = document.getElementById("splash");
@@ -40,8 +43,44 @@
                 });
                 function crimg(data){
             var img = document.getElementById("imag");
-            img.src = "data:image/jpg;base64, "+data;
+            var stringp = data.split('-');
+            var val = document.getElementById("val");
+            img.src = "data:image/jpg;base64, "+stringp[0];
+            val.innerHTML = `VAL:${stringp[1]}|Custo:${stringp[2]}|Valor:${stringp[3]}`;
                 };
+                document.querySelector('#butnomes').addEventListener('click', (e)=>{
+        e.preventDefault();
+        const str = document.getElementById("imag").src;
+                const nome = document
+                    .querySelector('#nome').value;
+ 
+                const valor = document
+                    .querySelector('#valor').value;
+
+                const custo = document.querySelector('#custo').value;
+
+                const id = document.querySelector('#id').value;
+
+                //const img = document.querySelector('#splash').value;
+                fetch('/imgs', {
+                    method: 'POST',
+                    headers: {
+                        Authorization: 'Bearer abcdxyz',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        nome,
+                        custo,
+                        valor,
+                        id,
+                        str
+                    }),
+                })
+                    .then((res) => {
+                        return res.json();
+                    })
+                    .then((data) => console.log(crimg(data)));
+            });
     document.querySelector('#butnome').addEventListener('click', (e)=>{
         e.preventDefault();
         const str = document.getElementById("imag").src;
@@ -75,9 +114,40 @@
                     })
                     .then((data) => console.log(crimg(data)));
             });
-            
+            document.querySelector('#butup')
+            .addEventListener('click', (e) => {
+                e.preventDefault();
+                const str = document.getElementById("imag").src;
+                const nome = document
+                    .querySelector('#nome').value;
+ 
+                const valor = document
+                    .querySelector('#valor').value;
+
+                const custo = document.querySelector('#custo').value;
+
+                const id = document.querySelector('#id').value;
+                fetch('/spost', {
+                    method: 'POST',
+                    headers: {
+                        Authorization: 'Bearer abcdxyz',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        nome,
+                        custo,
+                        valor,
+                        id,
+                        str
+                    }),
+                })
+                    .then((res) => {
+                        return res.json();
+                    })
+                    .then((data) => console.log(data));
+            });
         
-    document.querySelector('button')
+    document.querySelector('#butsub')
             .addEventListener('click', (e) => {
                 e.preventDefault();
                 const str = document.getElementById("imag").src;
@@ -111,11 +181,7 @@
                     })
                     .then((data) => console.log(data));
             });
-       
-            
-                    
-                     
-                
+
 </script>
 </body>
 </html>

@@ -35,8 +35,38 @@ app.post('/fpost',(req, res)=>{
             console.log(id);
        const blob = Buffer.from(str, 'base64');
        console.log(blob);
-       //nome=nidalee, custo=640, valor=320, ?, id=5
        const sqls = "INSERT INTO champ SET ?",
+    values = {
+        nome: nome,
+        custo: custo,
+        valor: valor,
+        splash: blob,
+        id: id
+    };
+       db.query(sqls, values, function(err, result){
+        if (err) throw err;
+        console.log("SUCESSO");
+       })
+})
+app.post('/spost',(req, res)=>{
+    const { nome, custo, valor, id, str} = req.body;
+    const { authorization } = req.headers;
+        res.send(
+            {
+                nome,
+                custo,
+                valor,
+                id,
+                str,
+                authorization
+            });
+            console.log(nome);
+            console.log(custo);
+            console.log(valor);
+            console.log(id);
+       const blob = Buffer.from(str, 'base64');
+       console.log(blob);
+       const sqls = "INSERT INTO skin SET ?",
     values = {
         nome: nome,
         custo: custo,
@@ -56,49 +86,62 @@ app.get('/query', (req,res)=>{
         return res.json(data);
     })
 })
-app.post('/img', (req, res)=>{
+app.post('/imgs', (req, res)=>{
     const { nome, custo, valor, id, str} = req.body;
     const { authorization } = req.headers;
-        /*res.setHeader(
-
-            {
-                nome,
-                custo,
-                valor,
-                id,
-                str,
-                authorization
-            });*/
             console.log(nome);
             console.log(custo);
             console.log(valor);
             console.log(id);
        const blob = Buffer.from(str, 'base64');
        console.log(blob);
-       const sqls = `SELECT splash FROM champ WHERE nome='${nome}';`;
-       
+       const sqls = `SELECT * FROM skin WHERE nome='${nome}';`;
     db.query(sqls, (err, result)=>{
         if (err) throw err;
         const dat = Buffer.from(result[0].splash);
+        console.log(result[0]);
+        const datn = Buffer.from(result[0].nome);
+        //ints
+        const datcs= result[0].custo.toString();
+        const datvs= result[0].valor.toString();
+        const datc = Buffer.from(datcs);
+        const datv = Buffer.from(datvs);
+        console.log(`${datn},${datc},${datv}`);
         var string = dat.toString('base64');
         var partS = string.split('jpegbase64');
-        //console.log(partS[1]);
-        res.send(`"${partS[1]}"`);
-        //<img src="data:image/jpg;base64, " alt="" height="900">
+        //res.send(`"${partS[1]}"`);
+        res.send(`"${partS[1]}-${datn}-${datc}-${datv}"`);
 });
 });
-app.get('/imag', async(req, res)=>{
-    //const dataImagePrefix = `data:image/png;base64,`
-    const str = `SELECT splash FROM champ WHERE nome='${nomer}';`;
-    db.query(str, (err, result)=>{
+app.post('/img', (req, res)=>{
+    const { nome, custo, valor, id, str} = req.body;
+    const { authorization } = req.headers;
+            console.log(nome);
+            console.log(custo);
+            console.log(valor);
+            console.log(id);
+       const blob = Buffer.from(str, 'base64');
+       console.log(blob);
+       const sqls = `SELECT * FROM champ WHERE nome='${nome}';`;
+       
+    db.query(sqls, (err, result)=>{
         if (err) throw err;
+        console.log(result[0]);
+        //buffers do rowdata
         const dat = Buffer.from(result[0].splash);
+        const datn = Buffer.from(result[0].nome);
+        //ints
+        const datcs= result[0].custo.toString();
+        const datvs= result[0].valor.toString();
+        const datc = Buffer.from(datcs);
+        const datv = Buffer.from(datvs);
+        console.log(`${datn},${datc},${datv}`);
         var string = dat.toString('base64');
+
         var partS = string.split('jpegbase64');
-        res.send(`<img src="data:image/jpg;base64, ${partS[1]}" alt="" height="900">`);
-        //console.log(partS[1]);
-    })
-})
+        res.send(`"${partS[1]}-${datn}-${datc}-${datv}"`);
+});
+});
 app.listen(port, ()=>{
     console.log(`api listening on port ${port}`);
 });
